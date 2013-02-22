@@ -69,3 +69,4 @@ if [ ! -f Procfile ]; then
   echo "-----> No Procfile found. Will use the following default process: "
   echo "       vertx run server.groovy"
 fi
+

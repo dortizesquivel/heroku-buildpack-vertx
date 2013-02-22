@@ -22,4 +22,6 @@ Example usage:
 
 The buildpack will detect your app as a Vert.x project if it has a file called `server.groovy`.
 
+Before to run the app, it run `./compile.sh` if it exists.
+
 If you don't provide a Procfile, the build pack will default to launching your app with `vertx run server.groovy`
