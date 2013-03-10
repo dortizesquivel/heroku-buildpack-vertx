@@ -66,7 +66,8 @@ fi
 
 # Warn if no Procfile is present
 if [ ! -f Procfile ]; then
+  [ -f 'app.json' ] && CONF='-conf app.json'
   echo "-----> No Procfile found. Will use the following default process: "
-  echo "       vertx run server.groovy"
+  echo "       vertx run server.groovy ${CONF}"
 fi
 
