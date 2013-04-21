@@ -4,6 +4,8 @@
 # fail fast
 set -e
 
+logger -p user.notice -t "slugc[$$]" "language_pack_java java_compile_start"
+
 BIN_DIR=$(cd $(dirname $0); pwd) # absolute path
 # parse args
 BUILD_DIR=$1
@@ -49,6 +51,29 @@ if [ ! -d "$BUILD_DIR/.vertx" ]; then
   echo " done"
 fi
 
+# change to cache dir to install maven
+cd $CACHE_DIR
+
+# install maven with base repository
+MAVEN_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/maven.tar.gz"
+
+if [ ! -d .maven ]; then
+  echo -n "-----> Installing Maven 3.0.3..."
+  curl --silent --max-time 60 --location $MAVEN_URL | tar xz
+  chmod +x .maven/bin/mvn
+  echo " done"
+fi
+
+MAVEN_SETTINGS_URL="http://s3.amazonaws.com/heroku-jvm-langpack-java/settings.xml"
+
+echo -n "-----> Installing settings.xml..."
+if [ -f .m2/settings.xml ]; then
+  rm .m2/settings.xml 
+fi
+curl --silent --max-time 10 --location $MAVEN_SETTINGS_URL --output .m2/settings.xml
+echo " done"
+
+
 cd $BUILD_DIR
 
 export JAVA_HOME="$BUILD_DIR/.jdk7"
@@ -58,11 +83,22 @@ export PATH=$PATH:$JAVA_HOME/bin:$VERTX_HOME/bin
 echo "Path is set to"
 echo $PATH
 
-if [ -f compile.sh ]; then
-    echo 'compile.sh file found, executing...'
-    chmod 700 compile.sh
-    ./compile.sh
+export MAVEN_OPTS="-Xmx512m"
+
+# build app
+BUILDCMD="$CACHE_DIR/.maven/bin/mvn -B -Duser.home=$BUILD_DIR -Dmaven.repo.local=$CACHE_DIR/.m2/repository -s $CACHE_DIR/.m2/settings.xml -DskipTests=true clean install"
+echo "-----> executing $BUILDCMD"
+
+$BUILDCMD 2>&1 | sed -u 's/^/       /'
+
+if [ "${PIPESTATUS[*]}" != "0 0" ]; then
+  echo " !     Failed to build app with Maven"
+  exit 1
 fi
+
+for DIR in ".m2" ".maven" ; do
+  cp -r $CACHE_DIR/$DIR $DIR
+done
 
 # Warn if no Procfile is present
 if [ ! -f Procfile ]; then
