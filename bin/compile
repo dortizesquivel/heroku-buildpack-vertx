@@ -13,23 +13,6 @@ CACHE_DIR=$2
 mkdir -p $CACHE_DIR
 
 cd $BUILD_DIR
-if [ -d "$CACHE_DIR/.jdk7" ]; then
-  echo -n "copying jdk to app"
-  cp -r "$CACHE_DIR/.jdk7" $BUILD_DIR
-  echo "done"
-fi
-
-OPENJDK7_URL="https://s3.amazonaws.com/heroku-jvm-langpack-java/openjdk7-u2-heroku-temaki.tar.gz"
-
-if [ ! -d "$BUILD_DIR/.jdk7" ]; then
-  echo -n "-----> Installing OpenJDK7u2 build (to .jdk7)....."
-  mkdir "$BUILD_DIR/.jdk7"
-  cd "$BUILD_DIR/.jdk7"
-  curl --max-time 180 --location $OPENJDK7_URL | tar xz
-  cd $BUILD_DIR
-  cp -r .jdk7 $CACHE_DIR/.jdk7
-  echo " done"
-fi
 
 if [ -d "$CACHE_DIR/.vertx" ]; then
   echo -n "copying vertx to app"
@@ -51,9 +34,8 @@ fi
 
 cd $BUILD_DIR
 
-export JAVA_HOME="$BUILD_DIR/.jdk7"
 export VERTX_HOME="$BUILD_DIR/.vertx"
-export PATH=$PATH:$JAVA_HOME/bin:$VERTX_HOME/bin
+export PATH=$PATH:$VERTX_HOME/bin
 
 echo "Path is set to"
 echo $PATH
@@ -70,4 +52,3 @@ if [ ! -f Procfile ]; then
   echo "-----> No Procfile found. Will use the following default process: "
   echo "       vertx run server.groovy ${CONF}"
 fi
-
