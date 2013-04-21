@@ -16,6 +16,6 @@ if [ ! -f $BUILD_DIR/Procfile ]; then
 [ -f "${BUILD_DIR}/app.json" ] && CONF='-conf app.json'
 cat <<EOF
 default_process_types:
-  web: vertx run server.groovy ${CONF}
+  web: vertx run server.js ${CONF}
 EOF
 fi
