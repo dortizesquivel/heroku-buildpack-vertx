@@ -78,7 +78,7 @@ cd $BUILD_DIR
 
 export JAVA_HOME="$BUILD_DIR/.jdk7"
 export VERTX_HOME="$BUILD_DIR/.vertx"
-export PATH=$PATH:$JAVA_HOME/bin:$VERTX_HOME/bin
+export PATH=$JAVA_HOME/bin:$VERTX_HOME/bin:$PATH
 
 echo "Path is set to"
 echo $PATH
