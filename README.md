@@ -11,7 +11,7 @@ Example usage:
     $ ls
     server.groovy
 
-    $ heroku create --stack cedar --buildpack https://github.com/enr/heroku-buildpack-vertx.git
+    $ heroku create --stack cedar --buildpack https://github.com/apertoire/heroku-buildpack-vertx.git
 	
 	$ git push heroku master
 
@@ -20,10 +20,10 @@ Example usage:
     -----> Vert.x app detected
     -----> Installing Vert.x..... done
 
-The buildpack will detect your app as a Vert.x project if it has a file called `server.groovy`.
+The buildpack will detect your app as a Vert.x project if it has a file called `pom.xml`.
 
 Before to run the app, it run `./compile.sh` if it exists.
 
-If you don't provide a Procfile, the build pack will default to launching your app with `vertx run server.groovy`
+If you don't provide a Procfile, the build pack will default to launching your app with `vertx run server.js`
 and the option `-conf app.json` if an app.json file is found.
 
