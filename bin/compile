@@ -106,3 +106,5 @@ if [ ! -f Procfile ]; then
   echo "-----> No Procfile found. Will use the following default process: "
   echo "       vertx run server.js ${CONF}"
 fi
+
+logger -p user.notice -t "slugc[$$]" "language_pack_java java_compile_end"
