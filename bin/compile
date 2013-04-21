@@ -18,7 +18,7 @@ cd $BUILD_DIR
 if [ -d "$CACHE_DIR/.jdk7" ]; then
   echo -n "copying jdk to app"
   cp -r "$CACHE_DIR/.jdk7" $BUILD_DIR
-  echo "done"
+  echo " done"
 fi
 
 OPENJDK7_URL="https://s3.amazonaws.com/heroku-jvm-langpack-java/openjdk7-u2-heroku-temaki.tar.gz"
@@ -36,7 +36,7 @@ fi
 if [ -d "$CACHE_DIR/.vertx" ]; then
   echo -n "copying vertx to app"
   cp -r "$CACHE_DIR/.vertx" $BUILD_DIR
-  echo "done"
+  echo " done"
 fi
 
 VERTX_URL="http://vertx.io/downloads/vert.x-1.3.1.final.tar.gz"
