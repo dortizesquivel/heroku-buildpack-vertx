@@ -8,12 +8,10 @@ cat <<EOF
 config_vars:
   PATH: .jdk7/bin:.vertx/bin:.tools:/usr/local/bin:/usr/bin:/bin
   JAVA_OPTS: -Xmx384m
-addons:
-  heroku-postgresql:dev
 EOF
 
 if [ ! -f $BUILD_DIR/Procfile ]; then
-[ -f "${BUILD_DIR}/app.json" ] && CONF='-conf app.json'
+[ -f "${BUILD_DIR}/.json" ] && CONF='-conf app.json'
 cat <<EOF
 default_process_types:
   web: vertx run server.js ${CONF}
